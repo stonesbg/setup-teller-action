@@ -2,6 +2,9 @@ const process = require("process");
 const core = require("@actions/core");
 const tc = require("@actions/tool-cache");
 
+const fs = require('fs');
+const path = require('path');
+
 async function install(version) {
   const cachedPath = tc.find(
     "teller",
@@ -28,6 +31,20 @@ async function install(version) {
     "teller",
     version.version,
   );
+
+  const files = fs.readdirSync(newCachedPath);
+  core.info(`Contents of the cached directory (${newCachedPath}):`);
+  files.forEach(file => {
+    const fullPath = path.join(newCachedPath, file);
+    const stats = fs.statSync(fullPath);
+
+    if (stats.isDirectory()) {
+      core.info(`[DIR]  ${file}`);
+    } else {
+      core.info(`[FILE] ${file} (${stats.size} bytes)`);
+    }
+  });
+
   core.info(`Cached Teller to ${newCachedPath}.`);
   core.addPath(newCachedPath);
 }
