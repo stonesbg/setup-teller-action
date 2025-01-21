@@ -19,9 +19,8 @@ async function install(version) {
   core.info(`Downloading Teller from ${url}.`);
 
   const zipPath = await tc.downloadTool(url);
-  core.info(`Zip ends wiht ${zipPath}, ${zipPath.endsWith('xz')}`)
   // Check if the downloaded file is tar.xz or tar.gz and extract accordingly
-  const extractedFolder = zipPath.endsWith('.tar.xz')
+  const extractedFolder = url.endsWith('.tar.xz')
     ? await tc.extractTar(zipPath, undefined, 'zxf') // xJ flag for tar.xz
     : await tc.extractTar(zipPath); // Default for tar.gz
   const newCachedPath = await tc.cacheDir(
