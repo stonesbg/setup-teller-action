@@ -61,7 +61,7 @@ function zipName(version) {
   let zip_name = `teller_${version}_${platform}_${arch}.tar.gz`;
 
   if (version.startsWith("2")) {
-    zip_name = `teller-${arch}-${platform.toLowerCase()}.tar.gz`;
+    zip_name = `teller-${arch}-${platform.toLowerCase()}.tar.xz`;
   }
 
   return zip_name;
