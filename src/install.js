@@ -21,7 +21,7 @@ async function install(version) {
   const zipPath = await tc.downloadTool(url);
   // Check if the downloaded file is tar.xz or tar.gz and extract accordingly
   const extractedFolder = zipPath.endsWith('.tar.xz')
-    ? await tc.extractTar(zipPath, undefined, 'x') // xJ flag for tar.xz
+    ? await tc.extractTar(zipPath, undefined, 'zxf') // xJ flag for tar.xz
     : await tc.extractTar(zipPath); // Default for tar.gz
   const newCachedPath = await tc.cacheDir(
     extractedFolder,
