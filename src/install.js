@@ -26,27 +26,36 @@ async function install(version) {
   const extractedFolder = url.endsWith('.tar.xz')
     ? await tc.extractTar(zipPath, undefined, 'xJ') // xJ flag for tar.xz
     : await tc.extractTar(zipPath); // Default for tar.gz
+
+  const { path: lowestFolder, depth } = getLowestChildFolder(extractedFolder);
+
   const newCachedPath = await tc.cacheDir(
-    extractedFolder,
+    lowestFolder,
     "teller",
     version.version,
   );
 
-  const files = fs.readdirSync(newCachedPath);
-  core.info(`Contents of the cached directory (${newCachedPath}):`);
-  files.forEach(file => {
-    const fullPath = path.join(newCachedPath, file);
-    const stats = fs.statSync(fullPath);
+  core.info(`Cached Teller to ${newCachedPath}.`);
+  core.addPath(newCachedPath);
+}
 
-    if (stats.isDirectory()) {
-      core.info(`[DIR]  ${file}`);
-    } else {
-      core.info(`[FILE] ${file} (${stats.size} bytes)`);
+function getLowestChildFolder(dir, depth = 0) {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  let maxDepth = depth;
+  let deepestPath = dir;
+
+  entries.forEach(entry => {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      const { depth: childDepth, path: childPath } = getLowestChildFolder(fullPath, depth + 1);
+      if (childDepth > maxDepth) {
+        maxDepth = childDepth;
+        deepestPath = childPath;
+      }
     }
   });
 
-  core.info(`Cached Teller to ${newCachedPath}.`);
-  core.addPath(newCachedPath);
+  return { depth: maxDepth, path: deepestPath };
 }
 
 function zipName(version) {
