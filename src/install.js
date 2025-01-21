@@ -64,7 +64,7 @@ function zipName(version) {
     zip_name = `teller_${platform}_${arch}.tar.gz`;
   }
 
-  return `teller_${version}_${arch}_${platform}.tar.gz`;
+  return zip_name;
 }
 
 module.exports = {
