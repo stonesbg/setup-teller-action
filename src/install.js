@@ -5,7 +5,7 @@ const tc = require("@actions/tool-cache");
 async function install(version) {
   const cachedPath = tc.find(
     "teller",
-     version.version,
+    version.version,
   );
   if (cachedPath) {
     core.info(`Using cached Teller installation from ${cachedPath}.`);
@@ -24,7 +24,7 @@ async function install(version) {
   const newCachedPath = await tc.cacheDir(
     extractedFolder,
     "teller",
-     version.version,
+    version.version,
   );
   core.info(`Cached Teller to ${newCachedPath}.`);
   core.addPath(newCachedPath);
@@ -58,7 +58,13 @@ function zipName(version) {
       throw new Error(`Unsupported platform ${process.platform}.`);
   }
 
-  return `teller_${version}_${platform}_${arch}.tar.gz`;
+  let zip_name = `teller_${version}_${platform}_${arch}.tar.gz`;
+
+  if (version.startsWith("v2")) {
+    zip_name = `teller_${platform}_${arch}.tar.gz`;
+  }
+
+  return `teller_${version}_${arch}_${platform}.tar.gz`;
 }
 
 module.exports = {
