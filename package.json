@@ -8,10 +8,10 @@
     "test": "teller --help"
   },
   "dependencies": {
-    "@actions/core": "^1.2.6",
+    "@actions/core": "^1.11.1",
     "@actions/tool-cache": "^1.6.1",
-    "node-fetch": "^2.6.1",
-    "semver": "^7.3.5"
+    "node-fetch": "^2.6.7",
+    "semver": "^7.7.4"
   },
   "devDependencies": {
     "@types/node": "^14.14.37",
